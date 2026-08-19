@@ -1,0 +1,147 @@
+<aside class="cart-panel" [class.open]="abierto()">
+  <!-- ENCABEZADO -->
+
+  <div class="cart-heading">
+    <h2>Tu carrito</h2>
+
+    <button type="button" (click)="cerrar()" aria-label="Cerrar carrito">×</button>
+  </div>
+
+  <!-- CARRITO VACÍO -->
+
+  <section class="empty-cart" *ngIf="carrito().length === 0">
+    <div class="empty-cart-icon" aria-hidden="true">🛒</div>
+
+    <h3>Tu carrito está vacío</h3>
+
+    <p>Explora nuestro catálogo y encuentra el mueble ideal para tu hogar.</p>
+
+    <button type="button" (click)="cerrar()">Seguir comprando</button>
+  </section>
+
+  <!-- PRODUCTOS DEL CARRITO -->
+
+  <div class="cart-item" *ngFor="let producto of carrito()">
+    <!-- IMAGEN -->
+
+    <div class="cart-item-image">
+      <img *ngIf="producto.imagen" [src]="producto.imagen" [alt]="producto.nombre" />
+
+      <span *ngIf="!producto.imagen">
+        {{ producto.nombre.charAt(0) }}
+      </span>
+    </div>
+
+    <!-- INFORMACIÓN DEL PRODUCTO -->
+
+    <div class="cart-item-info">
+      <strong>
+        {{ producto.nombre }}
+      </strong>
+
+      <p>
+        {{ producto.descripcion }}
+      </p>
+
+      <!-- MÉTRICAS -->
+
+      <div class="item-metrics">
+        <!-- PRECIO -->
+
+        <div class="metric">
+          <span> Precio </span>
+
+          <strong>
+            {{ producto.precioVenta | currency: 'MXN' : 'symbol-narrow' : '1.0-0' }}
+          </strong>
+        </div>
+
+        <!-- CANTIDAD -->
+
+        <div class="metric">
+          <span> Cantidad </span>
+
+          <div class="quantity">
+            <button
+              type="button"
+              (click)="cambiarCantidad(producto, -1)"
+              [disabled]="finalizandoCompra()"
+            >
+              −
+            </button>
+
+            <strong>
+              {{ producto.cantidad }}
+            </strong>
+
+            <button
+              type="button"
+              (click)="cambiarCantidad(producto, 1)"
+              [disabled]="finalizandoCompra() || producto.cantidad >= producto.stock"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <!-- SUBTOTAL -->
+
+        <div class="metric subtotal">
+          <span> Subtotal </span>
+
+          <strong>
+            {{
+              producto.precioVenta * producto.cantidad | currency: 'MXN' : 'symbol-narrow' : '1.0-0'
+            }}
+          </strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELIMINAR -->
+
+    <button
+      class="remove-item"
+      type="button"
+      [disabled]="finalizandoCompra()"
+      (click)="eliminarDelCarrito(producto)"
+      [attr.aria-label]="'Eliminar ' + producto.nombre"
+    >
+      🗑
+    </button>
+  </div>
+
+  <!-- TOTAL -->
+
+  <div class="cart-total" *ngIf="carrito().length > 0">
+    <span> Total </span>
+
+    <strong>
+      {{ totalCarrito | currency: 'MXN' : 'symbol-narrow' : '1.0-0' }}
+    </strong>
+  </div>
+
+  <!-- ERROR DE PAGO -->
+
+  <p class="checkout-message error" *ngIf="errorCompra()">
+    {{ errorCompra() }}
+  </p>
+
+  <!-- BOTÓN DE PAGO -->
+ 
+  <button
+    class="checkout-button"
+    type="button"
+    *ngIf="carrito().length > 0"
+    [disabled]="finalizandoCompra()"
+    (click)="finalizarCompra()"
+  >
+    <span class="button-spinner" *ngIf="finalizandoCompra()"></span>
+
+    {{ finalizandoCompra() ? 'Conectando con Mercado Pago...' : 'Pagar con Mercado Pago' }}
+  </button>
+</aside>
+
+<!-- FONDO OSCURO -->
+
+<div class="backdrop" *ngIf="abierto()" (click)="cerrar()"></div>

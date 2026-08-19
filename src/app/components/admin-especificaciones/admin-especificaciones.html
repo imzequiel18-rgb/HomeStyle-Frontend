@@ -1,0 +1,23 @@
+<header class="module-header"><div><p class="eyebrow">Catálogo enriquecido</p><h1>Especificaciones</h1><p>Define las características que pueden utilizar los productos.</p></div></header>
+<p class="notice success" *ngIf="mensaje()">{{ mensaje() }}</p><p class="notice error" *ngIf="error()">{{ error() }}</p>
+<section class="section-gap"><header class="section-header"><h2>Catálogo de especificaciones</h2><p>Crea y consulta las características disponibles.</p></header>
+<div class="stacked-admin-layout">
+<form class="card form horizontal-form specification-horizontal-form" (ngSubmit)="guardarAtributo()">
+  <div class="horizontal-form-title"><p class="eyebrow">Nueva</p><h2>Especificación</h2><span>Define una característica para tus productos.</span></div>
+  <label class="horizontal-field field-wide">Nombre<input name="atributoNombre" [(ngModel)]="atributo.nombre" required placeholder="Ej. Material" /></label>
+  <label class="horizontal-field">Tipo de dato<select name="tipoDato" [(ngModel)]="atributo.tipoDato" required><option value="TEXTO">Texto</option><option value="NUMERO">Número</option><option value="BOOLEANO">Sí / No</option><option value="FECHA">Fecha</option></select></label>
+  <label class="horizontal-field">Unidad<input name="unidad" [(ngModel)]="atributo.unidad" placeholder="cm, kg…" /></label>
+  <div class="actions horizontal-actions"><button>Guardar especificación</button></div>
+</form>
+<section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">Catálogo</p><h2>Especificaciones disponibles</h2></div><span>{{atributos().length}} registradas</span></div><table class="table"><thead><tr><th>Nombre</th><th>Tipo</th><th>Unidad</th><th>Acción</th></tr></thead><tbody><tr *ngFor="let item of atributos()"><td><strong>{{ item.nombre }}</strong></td><td>{{ item.tipoDato }}</td><td>{{ item.unidad || '-' }}</td><td class="row-actions"><button class="danger" type="button" (click)="eliminarAtributo(item)">Eliminar</button></td></tr><tr *ngIf="!atributos().length"><td colspan="4" class="empty">Aún no hay especificaciones registradas.</td></tr></tbody></table></section>
+</div></section>
+<section class="section-gap section-divider"><header class="section-header"><h2>Asignación por categoría</h2><p>Indica qué especificaciones debe capturar cada categoría.</p></header>
+<div class="stacked-admin-layout"><form class="card form horizontal-form relation-horizontal-form" (ngSubmit)="asignar()">
+  <div class="horizontal-form-title"><p class="eyebrow">Asignación</p><h2>Vincular especificación</h2><span>Relaciona una característica con una categoría.</span></div>
+  <label class="horizontal-field field-wide">Categoría<select name="relCategoria" [(ngModel)]="relacion.categoriaId" required><option [ngValue]="0">Seleccionar</option><option *ngFor="let item of categorias()" [ngValue]="item.id">{{ item.nombre }}</option></select></label>
+  <label class="horizontal-field field-wide">Especificación<select name="relAtributo" [(ngModel)]="relacion.atributoId" required><option [ngValue]="0">Seleccionar</option><option *ngFor="let item of atributos()" [ngValue]="item.id">{{ item.nombre }}</option></select></label>
+  <label class="horizontal-field compact-field">Orden<input type="number" min="1" name="orden" [(ngModel)]="relacion.orden" required /></label>
+  <label class="horizontal-field compact-field">Requerida<select name="obligatorio" [(ngModel)]="relacion.obligatorio"><option [ngValue]="true">Sí</option><option [ngValue]="false">No</option></select></label>
+  <div class="actions horizontal-actions"><button>Asignar</button></div>
+</form>
+<section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">Relaciones</p><h2>Especificaciones por categoría</h2></div><span>{{relaciones().length}} asignadas</span></div><table class="table"><thead><tr><th>Categoría</th><th>Especificación</th><th>Tipo</th><th>Requerida</th><th>Orden</th><th>Acción</th></tr></thead><tbody><tr *ngFor="let item of relaciones()"><td><strong>{{ item.categoriaNombre }}</strong></td><td>{{ item.atributoNombre }}</td><td>{{ item.tipoDato }} {{ item.unidad ? '(' + item.unidad + ')' : '' }}</td><td>{{ item.obligatorio ? 'Sí' : 'No' }}</td><td>{{ item.orden }}</td><td class="row-actions"><button class="danger" type="button" (click)="eliminarRelacion(item)">Quitar</button></td></tr><tr *ngIf="!relaciones().length"><td colspan="6" class="empty">Aún no hay especificaciones asignadas.</td></tr></tbody></table></section></div></section>

@@ -1,0 +1,311 @@
+<div class="cuenta-container">
+  <div class="cabecera">
+    <div>
+      <h1>Mi cuenta</h1>
+      <p>Administra toda la información de tu cuenta.</p>
+    </div>
+    <a routerLink="/tienda" class="btn-volver-tienda">← Volver a la tienda</a>
+  </div>
+
+  <div class="menu-cuenta">
+    <button (click)="seccion.set('perfil')" [class.activo]="seccion() === 'perfil'">
+      👤 Datos personales
+    </button>
+
+    <button
+      (click)="seccion.set('direcciones'); cargarDirecciones()"
+      [class.activo]="seccion() === 'direcciones'"
+    >
+      📍 Direcciones
+    </button>
+
+    <button (click)="seccion.set('pedidos'); cargarPedidos()" [class.activo]="seccion() === 'pedidos'">
+      📦 Mis pedidos
+    </button>
+  </div>
+
+  <div class="contenido">
+    <!-- ================= PERFIL ================= -->
+
+    <div *ngIf="seccion() === 'perfil'">
+      <div class="perfil-cargando" *ngIf="cargandoPerfil()">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Cargando tus datos...</span>
+      </div>
+
+      <div class="mensaje-error carga-error" *ngIf="errorCargaPerfil()">
+        {{ errorCargaPerfil() }}
+        <button type="button" (click)="cargarPerfil()">Reintentar</button>
+      </div>
+
+      <div class="perfil-card" *ngIf="!cargandoPerfil() && !errorCargaPerfil()">
+      <h2>Datos personales</h2>
+
+      <p>Aquí editaremos la información del usuario.</p>
+        <div class="mensaje-exito" *ngIf="mensajeExitoPerfil()">{{ mensajeExitoPerfil() }}</div>
+        <div class="mensaje-error" *ngIf="erroresPerfil['general']">{{ erroresPerfil['general'] }}</div>
+        <div class="perfil-formulario">
+          <label>Usuario
+            <input type="text" [(ngModel)]="perfil.userName" (ngModelChange)="limpiarErroresPerfil()" [class.input-error]="erroresPerfil['userName']" />
+            <small class="error-input" *ngIf="erroresPerfil['userName']">{{ erroresPerfil['userName'] }}</small>
+          </label>
+          <label>Correo
+            <input type="email" [(ngModel)]="perfil.email" (ngModelChange)="limpiarErroresPerfil()" [class.input-error]="erroresPerfil['email']" />
+            <small class="error-input" *ngIf="erroresPerfil['email']">{{ erroresPerfil['email'] }}</small>
+          </label>
+          <label>Teléfono
+            <input type="tel" [(ngModel)]="perfil.phoneNumber" (ngModelChange)="limpiarErroresPerfil()" [class.input-error]="erroresPerfil['phoneNumber']" />
+            <small class="error-input" *ngIf="erroresPerfil['phoneNumber']">{{ erroresPerfil['phoneNumber'] }}</small>
+          </label>
+        </div>
+        <button class="guardar btn-perfil" type="button" (click)="guardarPerfil()" [disabled]="guardandoPerfil() || !perfilModificado()">
+          <span class="spinner spinner-boton" *ngIf="guardandoPerfil()" aria-hidden="true"></span>
+          {{ guardandoPerfil() ? 'Guardando cambios...' : 'Guardar cambios' }}
+        </button>
+      </div>
+
+      <section class="perfil-card" *ngIf="!cargandoPerfil() && !errorCargaPerfil()">
+        <h2>Cambiar contraseña</h2>
+        <p>Ingresa tu contraseña actual y define una nueva contraseña.</p>
+        <div class="mensaje-exito" *ngIf="mensajeExitoPassword()">{{ mensajeExitoPassword() }}</div>
+        <div class="mensaje-error" *ngIf="erroresPassword['general']">{{ erroresPassword['general'] }}</div>
+        <div class="perfil-formulario">
+          <label>Contraseña actual
+            <span class="campo-password">
+              <input [type]="mostrarPasswordActual() ? 'text' : 'password'" [(ngModel)]="password.passwordActual" (ngModelChange)="limpiarErroresPassword()" [class.input-error]="erroresPassword['passwordActual']" />
+              <button class="btn-ojo" type="button" (click)="mostrarPasswordActual.set(!mostrarPasswordActual())" [attr.aria-label]="mostrarPasswordActual() ? 'Ocultar contraseña actual' : 'Mostrar contraseña actual'" [attr.title]="mostrarPasswordActual() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span aria-hidden="true">&#128065;</span>
+              </button>
+            </span>
+            <small class="error-input" *ngIf="erroresPassword['passwordActual']">{{ erroresPassword['passwordActual'] }}</small>
+          </label>
+          <label>Nueva contraseña
+            <span class="campo-password">
+              <input [type]="mostrarPasswordNueva() ? 'text' : 'password'" [(ngModel)]="password.passwordNueva" (ngModelChange)="limpiarErroresPassword()" [class.input-error]="erroresPassword['passwordNueva']" />
+              <button class="btn-ojo" type="button" (click)="mostrarPasswordNueva.set(!mostrarPasswordNueva())" [attr.aria-label]="mostrarPasswordNueva() ? 'Ocultar nueva contraseña' : 'Mostrar nueva contraseña'" [attr.title]="mostrarPasswordNueva() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span aria-hidden="true">&#128065;</span>
+              </button>
+            </span>
+            <small class="error-input" *ngIf="erroresPassword['passwordNueva']">{{ erroresPassword['passwordNueva'] }}</small>
+          </label>
+          <label>Confirmar contraseña
+            <span class="campo-password">
+              <input [type]="mostrarConfirmacionPassword() ? 'text' : 'password'" [(ngModel)]="password.confirmarPassword" (ngModelChange)="limpiarErroresPassword()" [class.input-error]="erroresPassword['confirmarPassword']" />
+              <button class="btn-ojo" type="button" (click)="mostrarConfirmacionPassword.set(!mostrarConfirmacionPassword())" [attr.aria-label]="mostrarConfirmacionPassword() ? 'Ocultar confirmación de contraseña' : 'Mostrar confirmación de contraseña'" [attr.title]="mostrarConfirmacionPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <span aria-hidden="true">&#128065;</span>
+              </button>
+            </span>
+            <small class="error-input" *ngIf="erroresPassword['confirmarPassword']">{{ erroresPassword['confirmarPassword'] }}</small>
+          </label>
+        </div>
+        <button class="guardar btn-perfil" type="button" (click)="actualizarPassword()" [disabled]="actualizandoPassword()">
+          <span class="spinner spinner-boton" *ngIf="actualizandoPassword()" aria-hidden="true"></span>
+          {{ actualizandoPassword() ? 'Actualizando contraseña...' : 'Actualizar contraseña' }}
+        </button>
+      </section>
+    </div>
+
+    <!-- ================= DIRECCIONES ================= -->
+
+    <div *ngIf="seccion() === 'direcciones'">
+      <div class="cabecera-direcciones">
+        <h2>Mis direcciones</h2>
+
+        <button class="btn-agregar" (click)="mostrarFormulario.set(true)">+ Nueva dirección</button>
+      </div>
+
+      <!-- ================= FORMULARIO ================= -->
+
+      <div class="formulario-direccion" *ngIf="mostrarFormulario()">
+        <div class="direccion-form-header">
+          <div>
+            <span class="geo-eyebrow">Ubicación de entrega</span>
+            <h3>{{ modoEdicion() ? 'Editar dirección' : 'Nueva dirección' }}</h3>
+          </div>
+          <button type="button" class="btn-ubicacion" (click)="usarMiUbicacion()" [disabled]="obteniendoUbicacion()">
+            <span class="pin">⌖</span>
+            {{ obteniendoUbicacion() ? 'Localizando...' : 'Usar mi ubicación actual' }}
+          </button>
+        </div>
+
+        <p class="geo-mensaje" *ngIf="mensajeUbicacion()">{{ mensajeUbicacion() }}</p>
+        <p class="geo-error" *ngIf="errorUbicacion()">{{ errorUbicacion() }}</p>
+
+        <div class="mapa-ubicacion" *ngIf="mapaUrl()">
+          <iframe [src]="mapaUrl()" title="Ubicación seleccionada en OpenStreetMap" loading="lazy"></iframe>
+          <div class="coordenadas">
+            <span>📍 Ubicación seleccionada</span>
+            <small>{{ nuevaDireccion.latitud }}, {{ nuevaDireccion.longitud }}</small>
+          </div>
+        </div>
+
+        <div class="fila">
+          <input
+            type="text"
+            placeholder="Nombre del destinatario"
+            [(ngModel)]="nuevaDireccion.nombreDestinatario"
+          />
+
+          <input type="text" placeholder="Teléfono" [(ngModel)]="nuevaDireccion.telefonoContacto" />
+        </div>
+
+        <div class="fila">
+          <input type="text" placeholder="Calle" [(ngModel)]="nuevaDireccion.calle" />
+
+          <input
+            type="text"
+            placeholder="Número exterior"
+            [(ngModel)]="nuevaDireccion.numeroExterior"
+          />
+
+          <input
+            type="text"
+            placeholder="Número interior"
+            [(ngModel)]="nuevaDireccion.numeroInterior"
+          />
+        </div>
+
+        <div class="fila">
+          <input type="text" placeholder="Colonia" [(ngModel)]="nuevaDireccion.colonia" />
+
+          <input type="text" placeholder="Ciudad" [(ngModel)]="nuevaDireccion.ciudad" />
+        </div>
+
+        <div class="fila">
+          <input type="text" placeholder="Estado" [(ngModel)]="nuevaDireccion.estado" />
+
+          <input
+            type="text"
+            placeholder="Código Postal"
+            [(ngModel)]="nuevaDireccion.codigoPostal"
+          />
+        </div>
+
+        <textarea rows="3" placeholder="Referencias" [(ngModel)]="nuevaDireccion.referencias">
+        </textarea>
+
+        <div class="botones-formulario">
+          <button
+            class="guardar"
+            (click)="modoEdicion() ? actualizarDireccion() : guardarDireccion()"
+          >
+            {{ modoEdicion() ? 'Actualizar dirección' : 'Guardar dirección' }}
+          </button>
+
+          <button type="button" class="cancelar" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- ================= LISTA DE DIRECCIONES ================= -->
+      <!-- ================= LISTA DE DIRECCIONES ================= -->
+
+      <!-- ================= LISTA DE DIRECCIONES ================= -->
+
+      <div class="direccion-card" *ngFor="let direccion of direcciones()">
+        <div class="card-header">
+          <h3>{{ direccion.nombreDestinatario }}</h3>
+
+          <span class="predeterminada-badge" *ngIf="direccion.predeterminada">
+            ⭐ Predeterminada
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p class="direccion">
+            {{ direccion.calle }}
+            {{ direccion.numeroExterior }}
+            {{ direccion.numeroInterior }}
+          </p>
+
+          <p>
+            {{ direccion.colonia }}
+          </p>
+
+          <p>
+            {{ direccion.ciudad }},
+            {{ direccion.estado }}
+            {{ direccion.codigoPostal }}
+          </p>
+
+          <br />
+
+          <p>
+            <strong>Teléfono:</strong>
+
+            {{ direccion.telefonoContacto }}
+          </p>
+
+          <p *ngIf="direccion.referencias">
+            <strong>Referencias:</strong>
+
+            {{ direccion.referencias }}
+          </p>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn-mapa" *ngIf="direccion.latitud != null && direccion.longitud != null" (click)="abrirUbicacion(direccion)">📍 Ver ubicación</button>
+          <button class="btn-editar" (click)="editarDireccion(direccion)">✏ Editar</button>
+
+          <button
+            class="btn-predeterminada"
+            *ngIf="!direccion.predeterminada"
+            (click)="hacerPredeterminada(direccion.id)"
+          >
+            ⭐ Predeterminada
+          </button>
+
+          <button class="btn-eliminar" (click)="eliminarDireccion(direccion.id)">
+            🗑 Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PEDIDOS ================= -->
+
+    <div *ngIf="seccion() === 'pedidos'">
+      <div class="pedidos-cargando" *ngIf="cargandoPedidos()">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Cargando tus pedidos...</span>
+      </div>
+
+      <div class="mensaje-error carga-error" *ngIf="errorPedidos()">
+        {{ errorPedidos() }}
+        <button type="button" (click)="cargarPedidos()">Reintentar</button>
+      </div>
+
+      <div class="sin-pedidos-cuenta" *ngIf="!cargandoPedidos() && !errorPedidos() && pedidos().length === 0">
+        <h2>Aún no has realizado ningún pedido.</h2>
+        <p>Cuando completes tu primera compra, podrás consultar su estado aquí.</p>
+        <a routerLink="/tienda" class="btn-agregar">Ir al catálogo</a>
+      </div>
+
+      <div class="pedidos-cuenta" *ngIf="!cargandoPedidos() && !errorPedidos() && pedidos().length">
+        <div class="cabecera-pedidos">
+          <div>
+            <h2>Mis pedidos</h2>
+            <p>Consulta el estado de todas tus compras.</p>
+          </div>
+        </div>
+
+        <article class="pedido-cuenta-card" *ngFor="let pedido of pedidos()">
+          <div class="pedido-cuenta-cabecera">
+            <div>
+              <span class="pedido-etiqueta">Pedido</span>
+              <h3>{{ pedido.folio }}</h3>
+            </div>
+            <span class="estado-pedido" [ngClass]="estadoPedidoClase(pedido.estado)">{{ pedido.estado }}</span>
+          </div>
+          <div class="pedido-cuenta-info">
+            <div><span>Fecha</span><strong>{{ pedido.fecha | date: 'dd/MM/yyyy' }}</strong></div>
+            <div *ngIf="pedido.metodoPago"><span>Método de pago</span><strong>{{ pedido.metodoPago }}</strong></div>
+            <div><span>Total</span><strong class="pedido-total">{{ pedido.total | currency: 'MXN' : 'symbol' : '1.0-0' }}</strong></div>
+          </div>
+          <button class="btn-detalle-cuenta" type="button" (click)="verDetallePedido(pedido.id)">Ver detalles</button>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>

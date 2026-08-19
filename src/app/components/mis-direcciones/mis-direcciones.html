@@ -1,0 +1,47 @@
+<header class="module-header">
+  <div>
+    <p class="eyebrow">Mi Cuenta</p>
+
+    <h1>Mis Direcciones</h1>
+
+    <p>Administra las direcciones donde deseas recibir tus pedidos.</p>
+  </div>
+</header>
+
+<p class="notice error" *ngIf="error()">
+  {{ error() }}
+</p>
+
+<div class="loading" *ngIf="cargando()">Cargando direcciones...</div>
+
+<div class="direccion-card" *ngFor="let direccion of direcciones()">
+  <div>
+    <h2>
+      {{ direccion.nombreDestinatario }}
+    </h2>
+
+    <p>
+      {{ direccion.calle }}
+      {{ direccion.numeroExterior }}
+
+      {{ direccion.numeroInterior }}
+    </p>
+
+    <p>
+      {{ direccion.colonia }}
+    </p>
+
+    <p>
+      {{ direccion.ciudad }},
+      {{ direccion.estado }}
+    </p>
+
+    <p>C.P. {{ direccion.codigoPostal }}</p>
+
+    <p>
+      {{ direccion.telefonoContacto }}
+    </p>
+  </div>
+
+  <span *ngIf="direccion.predeterminada" class="predeterminada"> Predeterminada </span>
+</div>

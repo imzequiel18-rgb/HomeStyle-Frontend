@@ -1,0 +1,25 @@
+<main class="payment-page">
+  <section class="payment-card">
+    <div class="icon" [class.ok]="estado() === 'approved'" [class.wait]="estado() === 'pending'" [class.bad]="estado() === 'rejected'">
+      {{ estado() === 'approved' ? '✓' : estado() === 'pending' ? '⌛' : estado() === 'rejected' ? '×' : 'i' }}
+    </div>
+
+    <h1 *ngIf="estado() === 'approved'">Pago aprobado</h1>
+    <h1 *ngIf="estado() === 'pending'">Pago pendiente</h1>
+    <h1 *ngIf="estado() === 'rejected'">Pago no aprobado</h1>
+    <h1 *ngIf="estado() === 'unknown'">Resultado del pago</h1>
+
+    <p *ngIf="estado() === 'approved'">Mercado Pago aprobó tu operación. Estamos confirmando tu pedido con el servidor.</p>
+    <p *ngIf="estado() === 'pending'">Tu pago aún está siendo procesado. El pedido se actualizará automáticamente cuando Mercado Pago confirme el resultado.</p>
+    <p *ngIf="estado() === 'rejected'">La operación no fue aprobada. Tu pedido permanecerá pendiente y puedes intentar el pago nuevamente.</p>
+    <p *ngIf="estado() === 'unknown'">Puedes consultar el estado definitivo desde Mis pedidos.</p>
+
+    <small *ngIf="paymentId()">Pago Mercado Pago: {{ paymentId() }}</small>
+    <small *ngIf="sincronizando()">Verificando pago con Mercado Pago...</small>
+
+    <div class="actions">
+      <button class="primary" (click)="irAPedidos()">Ver mis pedidos</button>
+      <button class="secondary" (click)="volverTienda()">Volver a la tienda</button>
+    </div>
+  </section>
+</main>

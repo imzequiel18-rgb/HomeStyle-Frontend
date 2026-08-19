@@ -1,0 +1,10 @@
+<header class="module-header"><div><p class="eyebrow">Catálogo</p><h1>Gestión de categorías</h1><p>Organiza los muebles para una navegación clara en tienda.</p></div></header>
+<p class="notice success" *ngIf="mensaje()">{{mensaje()}}</p><p class="notice error" *ngIf="error()">{{error()}}</p>
+<div class="stacked-admin-layout">
+<form class="card form horizontal-form category-horizontal-form" (ngSubmit)="guardar()">
+  <div class="horizontal-form-title"><p class="eyebrow">Categoría</p><h2>{{editandoId?'Editar categoría':'Nueva categoría'}}</h2><span>Agrega o actualiza una categoría del catálogo.</span></div>
+  <label class="horizontal-field">Nombre<input name="nombre" [(ngModel)]="form.nombre" required maxlength="30" placeholder="Ej. Sala" /></label>
+  <div class="actions horizontal-actions"><button>{{editandoId?'Actualizar':'Guardar'}}</button><button class="secondary" type="button" (click)="cancelar()">Limpiar</button></div>
+</form>
+<section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">Organización</p><h2>Categorías disponibles</h2></div><span>{{categorias().length}} registradas</span></div><table class="table"><thead><tr><th>Categoría</th><th>Acciones</th></tr></thead><tbody><tr *ngFor="let item of categorias()"><td><strong>{{item.nombre}}</strong></td><td class="row-actions"><button type="button" (click)="editar(item)">Editar</button><button class="danger" type="button" (click)="eliminar(item)">Eliminar</button></td></tr><tr *ngIf="!categorias().length"><td colspan="2" class="empty">No hay categorías registradas.</td></tr></tbody></table></section>
+</div>

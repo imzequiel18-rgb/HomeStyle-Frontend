@@ -1,0 +1,12 @@
+<header class="module-header"><div><p class="eyebrow">Abastecimiento</p><h1>GestiÃ³n de proveedores</h1><p>MantÃ©n actualizada la red de aliados comerciales.</p></div></header>
+<p class="notice success" *ngIf="mensaje()">{{mensaje()}}</p><p class="notice error" *ngIf="error()">{{error()}}</p>
+<div class="stacked-admin-layout">
+  <form class="card form horizontal-form provider-horizontal-form" (ngSubmit)="guardar()">
+    <div class="horizontal-form-title"><p class="eyebrow">Proveedor</p><h2>{{editandoId?'Editar proveedor':'Nuevo proveedor'}}</h2><span>Registra los datos de contacto de un aliado comercial.</span></div>
+    <label class="horizontal-field">Nombre<input name="nombre" [(ngModel)]="form.nombre" required /></label>
+    <label class="horizontal-field">Correo<input name="correo" type="email" [(ngModel)]="form.correo" required /></label>
+    <label class="horizontal-field">TelÃ©fono<input name="telefono" [(ngModel)]="form.telefono" required /></label>
+    <div class="actions horizontal-actions"><button>{{editandoId?'Actualizar':'Guardar'}}</button><button type="button" class="secondary" (click)="cancelar()">Limpiar</button></div>
+  </form>
+  <section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">Directorio</p><h2>Proveedores registrados</h2></div><span>{{proveedores().length}} registrados</span></div><table class="table"><thead><tr><th>Proveedor</th><th>Correo</th><th>TelÃ©fono</th><th></th></tr></thead><tbody><tr *ngFor="let item of proveedores()"><td>{{item.nombre}}</td><td>{{item.correo}}</td><td>{{item.telefono}}</td><td class="row-actions"><button type="button" (click)="editar(item)">Editar</button><button class="danger" type="button" (click)="eliminar(item)">Eliminar</button></td></tr><tr *ngIf="!proveedores().length"><td colspan="4" class="empty">No hay proveedores registrados.</td></tr></tbody></table></section>
+</div>

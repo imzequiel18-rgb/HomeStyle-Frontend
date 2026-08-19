@@ -1,0 +1,12 @@
+CAMBIOS REALIZADOS - HOME STYLE FRONTEND
+
+1. Se agregó PedidoService.cancelarPedido(id).
+2. En "Mis pedidos" aparece "Cancelar pedido" únicamente para pedidos PENDIENTES.
+3. Se pide confirmación antes de cancelar.
+4. La tarjeta cambia a CANCELADO al terminar correctamente.
+5. Se agregaron mensajes de éxito/error y estado "Cancelando...".
+6. También se puede cancelar un pedido PENDIENTE desde la pantalla de detalle.
+
+NOTA:
+Este ZIP se entrega sin node_modules para evitar incluir dependencias binarias del equipo original.
+Ejecuta npm install (o npm ci) antes de ng serve.

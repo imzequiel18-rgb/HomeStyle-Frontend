@@ -1,0 +1,285 @@
+<!-- =========================
+     CABECERA
+     ========================= -->
+
+<header class="store-header">
+
+  <a class="brand" routerLink="/tienda">
+    HOME<span>STYLE</span>
+  </a>
+
+  <nav class="main-nav" aria-label="Navegación principal">
+    <button type="button" class="nav-link" (click)="irAlCatalogo()">
+      Catálogo
+    </button>
+
+    <button type="button" class="nav-link" (click)="irAMisPedidos()">
+      Mis pedidos
+    </button>
+  </nav>
+
+  <div class="header-actions">
+
+    <span class="customer-name">
+      Hola, {{ nombreCliente() }}
+    </span>
+
+    <button
+      class="account-button"
+      type="button"
+      routerLink="/cuenta"
+    >
+      Mi cuenta
+    </button>
+
+    <button
+      class="session"
+      type="button"
+      (click)="cerrarSesion()"
+    >
+      Cerrar sesión
+    </button>
+
+    <button
+      class="cart-button"
+      type="button"
+      (click)="carritoComponent.toggle()"
+    >
+      Carrito
+
+      <span>
+        {{ carritoComponent?.cantidadCarrito ?? 0 }}
+      </span>
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     CARRITO
+     ========================= -->
+
+<app-carrito></app-carrito>
+
+
+<!-- =========================
+     HERO
+     ========================= -->
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <p class="eyebrow">
+      HOMESTYLE · MOBILIARIO
+    </p>
+
+    <h1>
+      Muebles hechos para sentirse como hogar.
+    </h1>
+
+    <p class="hero-copy">
+      Descubre piezas funcionales, cálidas y duraderas
+      para cada espacio.
+    </p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="irAlCatalogo()"
+    >
+      Ver colección
+    </button>
+
+  </div>
+
+  <div
+    class="hero-art"
+    aria-hidden="true"
+  >
+    <div class="chair">
+      <div class="chair-back"></div>
+      <div class="chair-seat"></div>
+      <div class="chair-leg left"></div>
+      <div class="chair-leg right"></div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CATÁLOGO
+     ========================= -->
+
+<section
+  id="catalogo"
+  class="catalog-section"
+>
+
+  <div class="section-title">
+
+    <div>
+
+      <p class="eyebrow">
+        NUESTRA COLECCIÓN
+      </p>
+
+      <h2>
+        Encuentra tu próximo mueble
+      </h2>
+
+    </div>
+
+    <input
+      [(ngModel)]="busqueda"
+      name="busqueda"
+      type="search"
+      placeholder="Buscar por nombre o categoría"
+    />
+
+  </div>
+
+
+  <!-- =========================
+       FILTROS
+       ========================= -->
+
+  <div class="filters">
+
+    <button
+      type="button"
+      [class.active]="categoriaSeleccionada() === null"
+      (click)="seleccionarCategoria(null)"
+    >
+      Todo
+    </button>
+
+    <button
+      *ngFor="let categoria of categorias()"
+      type="button"
+      [class.active]="
+        categoriaSeleccionada() === categoria.id
+      "
+      (click)="seleccionarCategoria(categoria.id!)"
+    >
+      {{ categoria.nombre }}
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       CARGANDO
+       ========================= -->
+
+  <p
+    class="status"
+    *ngIf="cargando()"
+  >
+    Cargando muebles...
+  </p>
+
+
+  <!-- =========================
+       ERROR
+       ========================= -->
+
+  <p
+    class="status error"
+    *ngIf="error()"
+  >
+    {{ error() }}
+  </p>
+
+
+  <!-- =========================
+       PRODUCTOS
+       ========================= -->
+
+  <div
+    class="product-grid"
+    *ngIf="!cargando() && !error()"
+  >
+
+    <article
+      class="product-card"
+      *ngFor="let producto of productosFiltrados"
+      role="link"
+      tabindex="0"
+      (click)="verDetalle(producto)"
+      (keydown.enter)="verDetalle(producto)"
+    >
+
+      <div class="product-image">
+
+        <img
+          *ngIf="producto.imagen"
+          [src]="producto.imagen"
+          [alt]="producto.nombre"
+        />
+
+        <span *ngIf="!producto.imagen">
+          {{ producto.nombre.charAt(0) }}
+        </span>
+
+      </div>
+
+
+      <div class="product-content">
+
+        <p class="category">
+          {{ producto.categoriaNombre || 'Muebles' }}
+        </p>
+
+        <h3>
+          {{ producto.nombre }}
+        </h3>
+
+        <p class="description">
+          {{ producto.descripcion }}
+        </p>
+
+        <div class="product-bottom">
+
+          <strong>
+            {{
+              producto.precioVenta
+                | currency: 'MXN' : 'symbol-narrow' : '1.0-0'
+            }}
+          </strong>
+
+          <button
+            type="button"
+            (click)="agregarAlCarrito($event, producto)"
+          >
+            Agregar
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+
+
+  <!-- =========================
+       SIN RESULTADOS
+       ========================= -->
+
+  <p
+    class="status"
+    *ngIf="
+      !cargando() &&
+      !error() &&
+      productosFiltrados.length === 0
+    "
+  >
+    No encontramos muebles con esos filtros.
+  </p>
+
+</section>

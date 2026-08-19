@@ -1,0 +1,89 @@
+<header class="page-header">
+  <div>
+    <button class="btn-back" (click)="volver()">← Volver a pedidos</button>
+
+    <h1>Pedido {{ pedido()?.numeroPedido }}</h1>
+
+    <p>Consulta la información del pedido.</p>
+  </div>
+</header>
+
+<div class="detalle-container" *ngIf="pedido() as p">
+  <section class="card">
+    <h2>Información del pedido</h2>
+
+    <div class="info-grid">
+      <div>
+        <label>Estado</label>
+
+        <span class="estado" [ngClass]="p.estado.toLowerCase()">
+          {{ p.estado }}
+        </span>
+      </div>
+
+      <div>
+        <label>Método</label>
+
+        <strong>
+          {{ p.metodoPago }}
+        </strong>
+      </div>
+
+      <div>
+        <label>Dirección</label>
+
+        <strong>
+          {{ p.direccionEnvio }}
+        </strong>
+      </div>
+
+      <div>
+        <label>Total</label>
+
+        <strong class="total">
+          {{ p.total | currency: 'MXN' }}
+        </strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="productos">
+    <h2>Productos</h2>
+
+    <div class="producto" *ngFor="let producto of p.productos">
+      <img [src]="producto.imagen" />
+
+      <div class="contenido">
+        <h3>
+          {{ producto.nombreProducto }}
+        </h3>
+
+        <div class="detalle">
+          <span>
+            Cantidad
+
+            <strong>
+              {{ producto.cantidad }}
+            </strong>
+          </span>
+
+          <span>
+            Precio
+
+            <strong>
+              {{ producto.precioUnitario | currency: 'MXN' }}
+            </strong>
+          </span>
+
+          <span>
+            Subtotal
+
+            <strong>
+              {{ producto.subtotal | currency: 'MXN' }}
+            </strong>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

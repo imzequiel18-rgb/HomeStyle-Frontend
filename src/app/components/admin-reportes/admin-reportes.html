@@ -1,0 +1,138 @@
+<div class="contenedor-reportes">
+  <div class="encabezado-reportes">
+    <h2>Reportes</h2>
+
+    @if (reporte()) {
+      <div class="exportacion">
+        <button
+          class="boton-exportar"
+          type="button"
+          (click)="alternarMenuExportacion()"
+          [attr.aria-expanded]="menuExportacionAbierto()"
+          aria-haspopup="menu">
+          Exportar reporte
+          <span aria-hidden="true">⌄</span>
+        </button>
+
+        @if (menuExportacionAbierto()) {
+          <div class="menu-exportacion" role="menu">
+            <button type="button" role="menuitem" (click)="exportarExcel()">Exportar a Excel</button>
+            <button type="button" role="menuitem" (click)="exportarPdf()">Exportar a PDF</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p>Cargando información...</p>
+  } @else if (reporte()) {
+    <div class="cards">
+      <div class="card">
+        <h4>Ventas Totales</h4>
+
+        <span>${{ reporte()!.ventasTotales | number: '1.2-2' }}</span>
+      </div>
+
+      <div class="card">
+        <h4>Pedidos</h4>
+
+        <span>{{ reporte()!.totalPedidos }}</span>
+      </div>
+
+      <div class="card">
+        <h4>Clientes</h4>
+
+        <span>{{ reporte()!.totalClientes }}</span>
+      </div>
+
+      <div class="card">
+        <h4>Productos</h4>
+
+        <span>{{ reporte()!.totalProductos }}</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabla">
+        <h3>Productos con menor stock</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+
+              <th>Stock</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (producto of reporte()!.productosStockBajo; track producto.nombre) {
+              <tr>
+                <td>{{ producto.nombre }}</td>
+
+                <td>{{ producto.stock }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tabla">
+        <h3>Productos más vendidos</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+
+              <th>Vendidos</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (producto of reporte()!.productosMasVendidos; track producto.nombre) {
+              <tr>
+                <td>{{ producto.nombre }}</td>
+
+                <td>{{ producto.vendidos }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tabla">
+      <h3>Últimos pedidos</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido</th>
+
+            <th>Cliente</th>
+
+            <th>Estado</th>
+
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (pedido of reporte()!.ultimosPedidos; track pedido.numeroPedido) {
+            <tr>
+              <td>{{ pedido.numeroPedido }}</td>
+
+              <td>{{ pedido.cliente }}</td>
+
+              <td>{{ pedido.estado }}</td>
+
+              <td>${{ pedido.total | number: '1.2-2' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

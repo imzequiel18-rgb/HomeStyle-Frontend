@@ -1,0 +1,13 @@
+<header class="module-header"><div><p class="eyebrow">CatÃ¡logo</p><h1>Marcas</h1><p>Administra las marcas disponibles para los productos.</p></div></header>
+<p class="notice success" *ngIf="mensaje()">{{ mensaje() }}</p><p class="notice error" *ngIf="error()">{{ error() }}</p>
+<div class="stacked-admin-layout">
+  <form class="card form horizontal-form brand-horizontal-form" (ngSubmit)="guardarMarca()">
+    <div class="horizontal-form-title"><p class="eyebrow">Marca</p><h2>Nueva marca</h2><span>Agrega una marca para clasificar tus productos.</span></div>
+    <label class="horizontal-field">Nombre<input name="marcaNombre" [(ngModel)]="marca.nombre" required /></label>
+    <label class="horizontal-field">DescripciÃ³n<textarea name="marcaDescripcion" [(ngModel)]="marca.descripcion"></textarea></label>
+    <label class="horizontal-field">Logo (URL)<input name="marcaLogo" [(ngModel)]="marca.logo" /></label>
+    <label class="horizontal-field">Estado<select name="marcaActivo" [(ngModel)]="marca.activo"><option [ngValue]="true">Activa</option><option [ngValue]="false">Inactiva</option></select></label>
+    <div class="actions horizontal-actions"><button>Guardar marca</button></div>
+  </form>
+  <section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">CatÃ¡logo</p><h2>Marcas disponibles</h2></div><span>{{marcas().length}} registradas</span></div><table class="table"><thead><tr><th>Marca</th><th>Estado</th><th>AcciÃ³n</th></tr></thead><tbody><tr *ngFor="let item of marcas()"><td><strong>{{ item.nombre }}</strong><small>{{ item.descripcion }}</small></td><td>{{ item.activo ? 'Activa' : 'Inactiva' }}</td><td class="row-actions"><button class="danger" type="button" (click)="eliminarMarca(item)">Eliminar</button></td></tr><tr *ngIf="!marcas().length"><td colspan="3" class="empty">AÃºn no hay marcas registradas.</td></tr></tbody></table></section>
+</div>

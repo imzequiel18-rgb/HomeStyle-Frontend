@@ -1,0 +1,129 @@
+<header class="module-header">
+  <div>
+    <p class="eyebrow">Ventas</p>
+    <h1>Gestión de pedidos</h1>
+    <p>Consulta y administra los pedidos realizados por los clientes.</p>
+  </div>
+</header>
+
+<p class="notice success" *ngIf="mensaje()">
+  {{ mensaje() }}
+</p>
+
+<p class="notice error" *ngIf="error()">
+  {{ error() }}
+</p>
+
+<!-- ================= Dashboard ================= -->
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>Pendientes</h3>
+    <span>{{ pendientes }}</span>
+  </div>
+
+  <div class="stat-card">
+    <h3>Pagados</h3>
+    <span>{{ pagados }}</span>
+  </div>
+
+  <div class="stat-card">
+    <h3>Enviados</h3>
+    <span>{{ enviados }}</span>
+  </div>
+
+  <div class="stat-card">
+    <h3>Entregados</h3>
+    <span>{{ entregados }}</span>
+  </div>
+
+  <div class="stat-card">
+    <h3>Cancelados</h3>
+    <span>{{ cancelados }}</span>
+  </div>
+</div>
+
+<!-- ================= Filtros ================= -->
+
+<section class="card">
+  <div class="filters">
+    <label class="search">
+      Buscar pedido
+
+      <input
+        type="text"
+        placeholder="Número de pedido o cliente"
+        [ngModel]="busqueda()"
+        (ngModelChange)="busqueda.set($event)"
+      />
+    </label>
+
+    <label class="estado">
+      Estado
+
+      <select [ngModel]="estadoFiltro()" (ngModelChange)="estadoFiltro.set($event)">
+        <option value="TODOS">Todos</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="PAGADO">Pagado</option>
+        <option value="ENVIADO">Enviado</option>
+        <option value="ENTREGADO">Entregado</option>
+        <option value="CANCELADO">Cancelado</option>
+      </select>
+    </label>
+  </div>
+</section>
+
+<!-- ================= Tabla ================= -->
+
+<section class="card table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Pedido</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Método</th>
+        <th>Dirección</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let pedido of pedidosFiltrados">
+        <td>
+          <strong>{{ pedido.numeroPedido }}</strong>
+        </td>
+
+        <td>{{ pedido.cliente }}</td>
+
+        <td>{{ pedido.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+
+        <td>{{ pedido.total | currency: 'MXN' }}</td>
+
+        <td>{{ pedido.metodoPago }}</td>
+
+        <td>{{ pedido.direccionEnvio || 'Sin dirección' }}</td>
+
+        <td>
+          <select [ngModel]="pedido.estado" (change)="cambiarEstado(pedido, $event)">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="PAGADO">Pagado</option>
+            <option value="ENVIADO">Enviado</option>
+            <option value="ENTREGADO">Entregado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </td>
+
+        <td class="row-actions">
+          <button type="button" (click)="verDetalle(pedido.id)">Ver detalle</button>
+        </td>
+      </tr>
+
+      <tr *ngIf="!pedidosFiltrados.length">
+        <td colspan="8" class="empty">No existen pedidos registrados.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

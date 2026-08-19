@@ -1,0 +1,14 @@
+<header class="module-header"><div><p class="eyebrow">Accesos</p><h1>GestiÃ³n de usuarios</h1><p>Administra los perfiles con acceso a la plataforma.</p></div></header>
+<p class="notice success" *ngIf="mensaje()">{{mensaje()}}</p><p class="notice error" *ngIf="error()">{{error()}}</p>
+<div class="stacked-admin-layout">
+  <form class="card form horizontal-form user-horizontal-form" (ngSubmit)="guardar()">
+    <div class="horizontal-form-title"><p class="eyebrow">Usuario</p><h2>{{editandoId?'Editar usuario':'Nuevo usuario'}}</h2><span>Configura los datos y nivel de acceso del perfil.</span></div>
+    <label class="horizontal-field">Usuario<input name="usuario" [(ngModel)]="form.userName" required /></label>
+    <label class="horizontal-field">Correo<input type="email" name="correo" [(ngModel)]="form.email" required /></label>
+    <label class="horizontal-field">TelÃ©fono<input name="telefono" [(ngModel)]="form.phoneNumber" required /></label>
+    <label class="horizontal-field">ContraseÃ±a<input type="password" name="password" [(ngModel)]="form.password" required /></label>
+    <label class="horizontal-field">Rol<select name="rol" [(ngModel)]="form.rol"><option value="CLIENTE">Cliente</option><option value="ADMIN">Administrador</option></select></label>
+    <div class="actions horizontal-actions"><button>{{editandoId?'Actualizar':'Guardar'}}</button><button type="button" class="secondary" (click)="cancelar()">Limpiar</button></div>
+  </form>
+  <section class="card table-wrap full-table-card"><div class="table-card-heading"><div><p class="eyebrow">Accesos</p><h2>Usuarios registrados</h2></div><span>{{usuarios().length}} registrados</span></div><table class="table"><thead><tr><th>Usuario</th><th>Correo</th><th>Rol</th><th></th></tr></thead><tbody><tr *ngFor="let item of usuarios()"><td>{{item.userName}}</td><td>{{item.email}}</td><td>{{item.rol}}</td><td class="row-actions"><button type="button" (click)="editar(item)">Editar</button><button class="danger" type="button" (click)="eliminar(item)">Eliminar</button></td></tr><tr *ngIf="!usuarios().length"><td colspan="4" class="empty">No hay usuarios registrados.</td></tr></tbody></table></section>
+</div>

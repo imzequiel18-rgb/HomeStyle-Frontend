@@ -1,0 +1,43 @@
+<header class="store-header">
+  <a class="brand" routerLink="/tienda">HOME <span>STYLE</span></a>
+  <a class="back-link" routerLink="/tienda">← Volver a la colección</a>
+</header>
+
+<main class="detail-page">
+  <p class="status" *ngIf="cargando()">Cargando producto...</p>
+  <section class="status error" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <a routerLink="/tienda">Volver a la tienda</a>
+  </section>
+
+  <article class="product-detail" *ngIf="producto() as producto">
+    <div class="image-panel">
+      <img *ngIf="producto.imagen" [src]="producto.imagen" [alt]="producto.nombre" />
+      <span *ngIf="!producto.imagen">{{ producto.nombre.charAt(0) }}</span>
+    </div>
+    <div class="product-info">
+      <p class="category">{{ producto.categoriaNombre || 'Muebles' }}<span *ngIf="producto.marcaNombre"> · {{ producto.marcaNombre }}</span></p>
+      <h1>{{ producto.nombre }}</h1>
+      <p class="price">{{ producto.precioVenta | currency:'MXN':'symbol-narrow':'1.0-0' }}</p>
+      <p class="description">{{ producto.descripcion }}</p>
+      <p class="availability" [class.out-of-stock]="producto.stock <= 0">
+        {{ producto.stock > 0 ? 'Disponible: ' + producto.stock + ' piezas' : 'Producto agotado' }}
+      </p>
+      <button class="add-button" type="button" [disabled]="producto.stock <= 0" (click)="agregarAlCarrito()">
+        {{ producto.stock > 0 ? 'Agregar al carrito' : 'Agotado' }}
+      </button>
+      <p class="added" *ngIf="agregado()">Producto agregado al carrito.</p>
+    </div>
+  </article>
+
+  <section class="specifications" *ngIf="producto() as producto">
+    <h2>Especificaciones</h2>
+    <dl *ngIf="especificaciones().length; else noSpecifications">
+      <div *ngFor="let atributo of especificaciones()">
+        <dt>{{ atributo.atributoNombre }}</dt>
+        <dd>{{ atributo.valor }}<span *ngIf="atributo.unidad"> {{ atributo.unidad }}</span></dd>
+      </div>
+    </dl>
+    <ng-template #noSpecifications><p>Aún no hay especificaciones registradas para este producto.</p></ng-template>
+  </section>
+</main>

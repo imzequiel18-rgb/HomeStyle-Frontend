@@ -1,0 +1,1 @@
+.admin-layout{background:radial-gradient(circle at 90% 0,rgba(174,112,74,.10),transparent 28rem),linear-gradient(180deg,#f8f3ed,#f3ece4);display:flex;min-height:100vh}.admin-content{box-sizing:border-box;flex:1;min-width:0;padding:44px clamp(24px,4vw,62px) 64px}@media(max-width:760px){.admin-layout{display:block}.admin-content{padding:28px 20px}}

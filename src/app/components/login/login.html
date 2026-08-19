@@ -1,0 +1,26 @@
+<main class="login-page">
+  <section class="login-showcase" aria-hidden="true">
+    <a class="brand" routerLink="/tienda">HOME <span>STYLE</span></a>
+    <div class="showcase-copy"><p>ESPACIOS QUE INSPIRAN</p><h2>Tu hogar merece sentirse extraordinario.</h2><span>Descubre muebles creados para acompañar tus mejores momentos.</span></div>
+    <div class="furniture-art"><div class="art-cushion"></div></div>
+  </section>
+  <section class="login-area">
+    <div class="login-panel">
+      <div><p class="eyebrow">Qué gusto verte de nuevo</p><h1>Inicia sesión</h1><p class="intro">Accede a tu cuenta para continuar con tu selección.</p></div>
+      <form (ngSubmit)="iniciarSesion()" #loginForm="ngForm" class="login-form">
+        <label>Correo electrónico<input type="email" name="email" [(ngModel)]="email" autocomplete="email" placeholder="correo@ejemplo.com" required /></label>
+        <label>Contraseña
+          <span class="password-field">
+            <input [type]="mostrarPassword() ? 'text' : 'password'" name="password" [(ngModel)]="password" autocomplete="current-password" placeholder="Tu contraseña" required />
+            <button type="button" class="password-toggle" (click)="mostrarPassword.set(!mostrarPassword())" [attr.aria-label]="mostrarPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.title]="mostrarPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+              <span aria-hidden="true">&#128065;</span>
+            </button>
+          </span>
+        </label>
+        <p *ngIf="error()" class="error">{{ error() }}</p>
+        <button type="submit" [disabled]="cargando()">{{ cargando() ? 'Entrando...' : 'Entrar a mi cuenta' }}</button>
+      </form>
+      <div class="login-links"><span>¿Aún no tienes cuenta? <a routerLink="/registro">Crea una</a></span><a class="guest-link" routerLink="/tienda">Explorar la tienda como invitado →</a></div>
+    </div>
+  </section>
+</main>

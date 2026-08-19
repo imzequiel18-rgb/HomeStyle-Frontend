@@ -1,0 +1,153 @@
+<div class="pedidos-container">
+
+  <header class="pedidos-header">
+
+    <div>
+      <p class="subtitle">Historial de compras</p>
+      <h1>Mis pedidos</h1>
+    </div>
+
+    <button
+      class="btn-volver"
+      type="button"
+      (click)="volverATienda()">
+
+      ← Volver a la tienda
+
+    </button>
+
+  </header>
+
+  <div class="loading" *ngIf="cargando()">
+    Cargando pedidos...
+  </div>
+
+  <div class="mensaje-exito" *ngIf="mensaje()">
+    {{ mensaje() }}
+  </div>
+
+  <div class="error" *ngIf="error()">
+    {{ error() }}
+  </div>
+
+  <div
+    class="sin-pedidos"
+    *ngIf="!cargando() && !error() && pedidos().length===0">
+
+    <h2>No has realizado compras todavía.</h2>
+
+    <p>
+      Cuando realices tu primera compra aparecerá aquí.
+    </p>
+
+  </div>
+
+  <div
+    class="pedidos-grid"
+    *ngIf="!cargando() && pedidos().length">
+
+    <article
+      class="pedido-card"
+      *ngFor="let pedido of pedidos()">
+
+      <div class="pedido-top">
+
+        <div>
+
+          <span class="pedido-label">
+
+            Pedido
+
+          </span>
+
+          <h2>{{ pedido.numeroPedido }}</h2>
+
+        </div>
+
+        <span
+          class="estado"
+          [ngClass]="pedido.estado.toLowerCase()">
+
+          {{ pedido.estado }}
+
+        </span>
+
+      </div>
+
+      <div class="pedido-info">
+
+        <div>
+
+          <span>Fecha</span>
+
+          <strong>
+
+            {{ pedido.fecha | date:'dd/MM/yyyy HH:mm' }}
+
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>Método de pago</span>
+
+          <strong>
+
+            {{ pedido.metodoPago }}
+
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>Total</span>
+
+          <strong class="precio">
+
+            {{ pedido.total | currency:'MXN':'symbol':'1.0-0' }}
+
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>Dirección de entrega</span>
+
+          <strong>
+            {{ pedido.direccionEnvio || 'Sin dirección registrada' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+      <div class="pedido-acciones">
+        <button
+          class="btn-detalle"
+          type="button"
+          (click)="verDetalle(pedido.id)">
+
+          Ver detalles
+
+        </button>
+
+        <button
+          *ngIf="pedido.estado === 'PENDIENTE'"
+          class="btn-cancelar"
+          type="button"
+          [disabled]="cancelandoId() !== null"
+          (click)="cancelarPedido(pedido)">
+
+          {{ cancelandoId() === pedido.id ? 'Cancelando...' : 'Cancelar pedido' }}
+
+        </button>
+      </div>
+
+    </article>
+
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+REDISEÑO HOME STYLE - ÁREA DEL CLIENTE
+
+Se actualizó únicamente la presentación visual de las pantallas del cliente para mantener coherencia con la tienda principal.
+
+Pantallas ajustadas:
+- Mis pedidos
+- Detalle de pedido
+- Mi cuenta
+- Datos personales
+- Direcciones
+- Mis pedidos dentro de Mi cuenta
+- Ruta independiente de Mis direcciones
+
+Identidad visual aplicada:
+- Fondo crema #FAF7F2
+- Café oscuro #302820 / #3E3027
+- Terracota #A66B4D / #C68158
+- Tarjetas blancas cálidas con bordes y sombras suaves
+- Tipografía Georgia en títulos destacados
+- Botones y estados con una estética más sobria y consistente
+- Mejoras responsive para móvil
+
+No se modificó la lógica de pedidos, Mercado Pago, cancelaciones, direcciones ni perfil.

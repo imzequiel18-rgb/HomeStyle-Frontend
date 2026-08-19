@@ -1,0 +1,99 @@
+<div class="detalle-container" *ngIf="pedido() as p">
+  <header class="detalle-header">
+    <button class="btn-volver" (click)="volver()">← Volver a mis pedidos</button>
+
+    <div class="titulo">
+      <p class="subtitulo">Detalle del pedido</p>
+      <h1>{{ p.numeroPedido }}</h1>
+    </div>
+
+    <div class="estado-acciones">
+      <span class="estado" [ngClass]="p.estado.toLowerCase()">
+        {{ p.estado | titlecase }}
+      </span>
+
+      <button
+        *ngIf="p.estado === 'PENDIENTE'"
+        class="btn-cancelar-pedido"
+        type="button"
+        [disabled]="cancelando()"
+        (click)="cancelarPedido()">
+        {{ cancelando() ? 'Cancelando...' : 'Cancelar pedido' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="resumen">
+    <div class="dato">
+      <span>Fecha</span>
+      <strong>{{ p.fecha | date: 'dd/MM/yyyy HH:mm' }}</strong>
+    </div>
+
+    <div class="dato">
+      <span>Método de pago</span>
+      <strong>{{ p.metodoPago }}</strong>
+    </div>
+
+    <div class="dato">
+      <span>Dirección</span>
+      <strong>{{ p.direccionEnvio }}</strong>
+    </div>
+
+    <div class="dato" *ngIf="p.metodoPago === 'MERCADO_PAGO' && p.mercadoPagoStatus">
+      <span>Estado de pago</span>
+      <strong>{{ p.mercadoPagoStatus | titlecase }}</strong>
+      <small *ngIf="p.mercadoPagoPaymentId">ID: {{ p.mercadoPagoPaymentId }}</small>
+    </div>
+
+    <div class="dato total">
+      <span>Total</span>
+      <strong>{{ p.total | currency: 'MXN' : 'symbol' : '1.0-0' }}</strong>
+    </div>
+  </section>
+
+  <h2 class="titulo-productos">Productos del pedido</h2>
+
+  <section class="productos">
+    <article class="producto-card" *ngFor="let producto of p.productos">
+      <div class="imagen">
+        <img *ngIf="producto.imagen" [src]="producto.imagen" [alt]="producto.nombreProducto" />
+      </div>
+
+      <div class="contenido">
+        <h3>{{ producto.nombreProducto }}</h3>
+
+        <div class="info">
+          <div>
+            <span>Cantidad</span>
+
+            <strong>
+              {{ producto.cantidad }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Precio</span>
+
+            <strong>
+              {{ producto.precioUnitario | currency: 'MXN' : 'symbol' : '1.0-0' }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Subtotal</span>
+
+            <strong class="subtotal">
+              {{ producto.subtotal | currency: 'MXN' : 'symbol' : '1.0-0' }}
+            </strong>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+
+<div class="loading" *ngIf="cargando()">Cargando pedido...</div>
+
+<div class="error" *ngIf="error()">
+  {{ error() }}
+</div>

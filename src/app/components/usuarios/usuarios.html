@@ -1,0 +1,11 @@
+<h2>Lista de Usuarios</h2>
+
+<p *ngIf="cargando()">Cargando usuarios...</p>
+<p *ngIf="error()">{{ error() }}</p>
+<p *ngIf="!cargando() && !error() && usuarios().length === 0">No hay usuarios registrados.</p>
+
+<ul *ngIf="!cargando() && usuarios().length > 0">
+  <li *ngFor="let u of usuarios()">
+    {{ u.email }} - {{ u.user }} <span *ngIf="u.phoneNumber">- {{ u.phoneNumber }}</span>
+  </li>
+</ul>
