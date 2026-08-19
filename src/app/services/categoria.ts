@@ -13,7 +13,7 @@ export interface Categoria {
 @Injectable({ providedIn: 'root' })
 export class CategoriaService {
 
-  private readonly apiUrl = 'http://localhost:8080/api/categorias';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api/categorias';
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +23,7 @@ export class CategoriaService {
 
   obtenerAtributosCategoria(categoriaId: number): Observable<CategoriaAtributo[]> {
     return this.http.get<CategoriaAtributo[]>(
-      `http://localhost:8080/api/categoria-atributos/categoria/${categoriaId}`,
+      `https://homestyle-backend-production.up.railway.app/api/categoria-atributos/categoria/${categoriaId}`,
       { headers: this.headers() },
     );
   }
@@ -43,5 +43,5 @@ export class CategoriaService {
     const token = localStorage.getItem('token');
     return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
   }
-  
+
 }

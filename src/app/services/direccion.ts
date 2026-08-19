@@ -4,9 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
-})  
+})
 export class DireccionService {
-  private api = 'http://localhost:8080/api/direcciones';
+  private api = 'https://homestyle-backend-production.up.railway.app/api/direcciones';
 
   constructor(private http: HttpClient) {}
 

@@ -11,7 +11,7 @@ export interface Proveedor {
 
 @Injectable({ providedIn: 'root' })
 export class ProveedorService {
-  private readonly apiUrl = 'http://localhost:8080/api/proveedores';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api/proveedores';
 
   constructor(private http: HttpClient) {}
 

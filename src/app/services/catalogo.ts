@@ -8,7 +8,7 @@ export interface CategoriaAtributo { id?: number; categoriaId: number; categoria
 
 @Injectable({ providedIn: 'root' })
 export class CatalogoService {
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api';
   constructor(private http: HttpClient) {}
   marcas(): Observable<Marca[]> { return this.http.get<Marca[]>(`${this.apiUrl}/marcas`, { headers: this.headers() }); }
   crearMarca(item: Marca): Observable<Marca> { return this.http.post<Marca>(`${this.apiUrl}/marcas`, item, { headers: this.headers() }); }

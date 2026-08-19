@@ -54,8 +54,8 @@ export interface ProductoTienda {
 
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
-  private readonly apiUrl = 'http://localhost:8080/api/productos';
-  private readonly productoAtributosUrl = 'http://localhost:8080/api/producto-atributos';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api/productos';
+  private readonly productoAtributosUrl = 'https://homestyle-backend-production.up.railway.app/api/producto-atributos';
   constructor(private http: HttpClient) {}
 
   obtenerProductos(): Observable<ProductoTienda[]> {

@@ -27,7 +27,7 @@ export interface CambiarPasswordRequest {
 })
 export class UsuarioService {
 
-  private apiUrl = 'http://localhost:8080/api/usuarios';
+  private apiUrl = 'https://homestyle-backend-production.up.railway.app/api/usuarios';
 
   constructor(private http: HttpClient) {}
 
@@ -39,9 +39,9 @@ export class UsuarioService {
       : new HttpHeaders();
   }
 
-  obtenerUsuarios(): Observable<any> { 
+  obtenerUsuarios(): Observable<any> {
     return this.http.get(this.apiUrl, { headers: this.getHeaders() });
-  }  
+  }
 
   crearUsuario(usuario: any): Observable<any> {
     return this.http.post(this.apiUrl, usuario, { headers: this.getHeaders() });

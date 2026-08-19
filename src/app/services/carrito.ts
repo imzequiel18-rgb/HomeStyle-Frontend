@@ -27,8 +27,9 @@ export interface CarritoDTO {
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
   private usuarioActual: string | null = null;
-  private readonly apiUrl = 'http://localhost:8080/api/carrito';
-  private readonly uploadsUrl = 'http://localhost:8080/uploads';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api/carrito';
+  //private readonly uploadsUrl = 'https://homestyle-backend-production.up.railway.app/uploads';
+  private readonly uploadsUrl = 'https://homestyle-backend-production.up.railway.app/uploads';
   private readonly carritoSubject = new BehaviorSubject<ProductoCarrito[]>([]);
   readonly carrito$ = this.carritoSubject.asObservable();
 

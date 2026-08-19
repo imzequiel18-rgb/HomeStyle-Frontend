@@ -55,7 +55,7 @@ export interface MercadoPagoPreferenceDTO {
   providedIn: 'root',
 })
 export class PedidoService {
-  private readonly apiUrl = 'http://localhost:8080/api/pedidos';
+  private readonly apiUrl = 'https://homestyle-backend-production.up.railway.app/api/pedidos';
 
   constructor(private http: HttpClient) {}
 

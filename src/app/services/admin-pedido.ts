@@ -37,7 +37,8 @@ export interface PedidoDetalle {
   providedIn: 'root',
 })
 export class AdminPedidoService {
-  private readonly API = 'http://localhost:8080/api/admin/pedidos';
+  //private readonly API = 'https://homestyle-backend-production.up.railway.app/api/admin/pedidos';
+  private readonly API = 'https://homestyle-backend-production.up.railway.app/api/admin/pedidos';
 
   constructor(private http: HttpClient) {}
 
@@ -49,7 +50,7 @@ export class AdminPedidoService {
     const params = new HttpParams().set('estado', estado);
 
     return this.http.put(`${this.API}/${id}/estado`, {}, { params });
-  }  
+  }
 
   obtenerDetallePedido(id: number) {
     return this.http.get<PedidoDetalle>(`${this.API}/${id}`);

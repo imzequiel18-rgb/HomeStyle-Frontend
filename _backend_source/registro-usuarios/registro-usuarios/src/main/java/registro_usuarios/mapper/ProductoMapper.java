@@ -143,7 +143,7 @@ public class ProductoMapper {
             return null;
         }
 
-        return "http://localhost:8080/uploads/" + nombreImagen;
+        return "https://homestyle-backend-production.up.railway.app/uploads/" + nombreImagen;
     }
 
 }
